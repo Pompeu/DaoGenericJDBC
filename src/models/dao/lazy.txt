@@ -1,0 +1,36 @@
+		/*
+		 * ProxyFactory factory = new ProxyFactory();
+		 * factory.setSuperclass(type);
+		 * 
+		 * Class<?> magica = factory.createClass();
+		 * 
+		 * try {
+		 * 
+		 * @SuppressWarnings("unchecked") final T instance = (T)
+		 * magica.newInstance();
+		 * 
+		 * MethodHandler handler = new MethodHandler() {
+		 * 
+		 * @Override public Object invoke(Object self, Method thisMethod, Method
+		 * proceed, Object[] args) throws Throwable {
+		 * 
+		 * stm = con.prepareStatement("select * from " +
+		 * type.getSimpleName().toLowerCase() + "s where id=?");
+		 * 
+		 * stm.setInt(1, id);
+		 * 
+		 * ResultSet rs = stm.executeQuery(); rs.next();
+		 * 
+		 * for (int i = 0; i < type.getDeclaredFields().length; i++) { Field f =
+		 * type.getDeclaredFields()[i]; f.setAccessible(true); f.set(instance,
+		 * rs.getObject(f.getName())); }
+		 * 
+		 * return proceed.invoke(self, args); } };
+		 * 
+		 * ((Proxy) instance).setHandler(handler);
+		 * 
+		 * return instance; } catch (Exception e) { throw new
+		 * PompeuHibernado(e);
+		 * 
+		 * }
+		 */
