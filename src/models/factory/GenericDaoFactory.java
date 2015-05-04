@@ -1,4 +1,4 @@
-package models.dao;
+package models.factory;
 
 import java.sql.Connection;
 import java.util.List;

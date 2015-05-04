@@ -13,7 +13,7 @@ public class Livro	{
 	private Integer qtd;
 	private BigDecimal preco;
 
-	Livro() {
+	public Livro() {
 	}
 
 	public Livro(String titulo, String autor, String category, String isbn,

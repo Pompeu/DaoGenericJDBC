@@ -1,4 +1,4 @@
-package models.dao;
+package models.factory;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -17,9 +17,10 @@ public class Session {
 	public Session(Connection con) {
 		this.con = con;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <T> T persist(T objeto) {
+
 		int lenfilds = objeto.getClass().getDeclaredFields().length;
 		int indice = 1;
 		Field[] fs = objeto.getClass().getDeclaredFields();
@@ -58,6 +59,10 @@ public class Session {
 			stm = con.prepareStatement(sql,
 					PreparedStatement.RETURN_GENERATED_KEYS);
 			for (int i = 1; i < indice; i++) {
+				if (fildesValues[i].getClass().isEnum()) {
+					stm.setObject(i, fildesValues[i].toString());
+					continue;
+				}
 				stm.setObject(i, fildesValues[i]);
 			}
 			stm.execute();
@@ -116,6 +121,10 @@ public class Session {
 			stm.setLong(indice, id);
 
 			for (int i = 1; i < indice; i++) {
+				if (fildesValues[i].getClass().isEnum()) {
+					stm.setObject(i, fildesValues[i].toString());
+					continue;
+				}
 				stm.setObject(i, fildesValues[i]);
 			}
 
@@ -141,12 +150,16 @@ public class Session {
 			stm.setInt(1, id);
 
 			ResultSet rs = stm.executeQuery();
-
+			/*Arrays.asList(newInstance.getClass().getDeclaredFields()).forEach(
+					System.out::println);*/
 			if (rs.next()) {
 				for (int i = 0; i < newInstance.getClass().getDeclaredFields().length; i++) {
+
 					Field f = newInstance.getClass().getDeclaredFields()[i];
 					f.setAccessible(true);
-					f.set(newInstance, rs.getObject(f.getName()));
+					System.out.println(f);
+					//System.out.println(f.getName());
+					// f.set(newInstance, rs.getObject(f.getName()));
 				}
 				return newInstance;
 			}

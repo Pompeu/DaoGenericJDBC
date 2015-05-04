@@ -1,6 +1,8 @@
 package teste;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -8,27 +10,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import models.dao.GenericDaoFactory;
 import models.dao.Livro;
+import models.dao.Nivel;
 import models.dao.User;
+import models.factory.GenericDaoFactory;
 import models.jdbc.JdbcCon;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TesteGenericDAO {
-	User user;
-	GenericDaoFactory dao;
-	Livro livro;
+	private User user;
+	private GenericDaoFactory dao;
+	private Livro livro;
 	private Integer idUser;
 	private Integer idLivro;
-	static Connection connection = JdbcCon.getConnection(
+	private static Connection connection = JdbcCon.getConnection(
 			"jdbc:postgresql://localhost:5432/livraria", "postgres", "123");
+
 
 	@Before
 	public void before() {
-		user = new User("Maria", "12345678959", "maria@net.com", "552525");
+		user = new User("Maria", "12345678959", "maria@net.com", "552525",
+				Nivel.ADMIN);
 
 		livro = new Livro("titulo1", "autor1", "category1", "isbn1", 10,
 				new BigDecimal(15.25));
@@ -36,10 +40,6 @@ public class TesteGenericDAO {
 		dao = new GenericDaoFactory(connection);
 	}
 
-	@After
-	public void after() {
-
-	}
 
 	@Test
 	public void genericaDaoSaveTeste() {
@@ -53,9 +53,9 @@ public class TesteGenericDAO {
 		deleteById(idUser, idLivro);
 		System.out.println(idUser + " " + idLivro);
 	}
-	
+
 	private void deleteById(Integer idUser, Integer idLivro) {
-		
+
 		User byId2 = dao.getById(User.class, idUser);
 		Boolean delete = dao.delete(byId2);
 		assertNotNull(delete);
